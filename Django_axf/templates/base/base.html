@@ -1,0 +1,78 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% block title %}
+        {% endblock %}
+    </title>
+
+    <link rel="stylesheet" href="{% static 'base/css/base.css' %}">
+    {% block extcss %}
+    {% endblock %}
+</head>
+<body>
+{% block body %}
+
+    {# 导航#}
+    {% block header %}
+        <header>爱鲜蜂</header>
+    {% endblock %}
+
+
+    {# 主体内容#}
+    <div class="hidescroll">
+        {% block content %}
+            主体内容
+        {% endblock %}
+    </div>
+
+    {# 尾部#}
+    {% block footer %}
+        <footer>
+            <a href="{% url 'axf:home' %}" class="home">
+                <dl>
+                    <dt><span></span></dt>
+                    <dd>首页</dd>
+                </dl>
+            </a>
+
+            <a href="{% url 'axf:market' %}" class="market">
+                <dl>
+                    <dt><span></span></dt>
+                    <dd>超市闪购</dd>
+                </dl>
+            </a>
+
+
+            <a href="{% url 'axf:cart' %}" class="cart">
+                <dl>
+                    <dt><span></span></dt>
+                    <dd>购物车</dd>
+                </dl>
+            </a>
+
+
+            <a href="{% url 'axf:mine' %}" class="mine">
+                <dl>
+                    <dt><span></span></dt>
+                    <dd>我的</dd>
+                </dl>
+            </a>
+
+        </footer>
+    {% endblock %}
+
+{% endblock %}
+
+<script src="{% static 'base/js/jquery.min.js' %}"></script>
+
+<script src="{% static 'base/js/base.js' %}"></script>
+
+{% block extjs %}
+
+{% endblock %}
+</body>
+</html>
