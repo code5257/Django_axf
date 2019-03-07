@@ -1,4 +1,4 @@
-
+html,
 body {
 	width: 100%;
 	height: 100%;
@@ -68,14 +68,12 @@ footer a {
 	overflow: hidden!important;
 }
 
-
 footer dl {
 	height: 100%;
 }
 /*footer .item{*/
 	/*height: 100%;*/
 /*}*/
-
 
 footer dl dt {
 	height: 65%;
@@ -85,7 +83,6 @@ footer dl dt {
 	/*height: 65%;*/
 	/*position: relative;*/
 /*}*/
-
 
 footer dl dt span {
 	display: inline-block;
@@ -98,17 +95,6 @@ footer dl dt span {
 	/*height: 100%;*/
 /*}*/
 
-
-footer dl dd {
-	width: 100%;
-	height: 35%;
-	font-size: 0.625rem;
-	line-height: 100%;
-
-	margin-left: 0px;
-
-	/*color: blueviolet;*/
-}
 /*footer .item .name{*/
 	/*width: 100%;*/
 	/*height: 35%;*/
@@ -116,6 +102,14 @@ footer dl dd {
 	/*line-height: 100%;*/
 	/*!*color: blueviolet;*!*/
 /*}*/
+
+footer dl dd {
+	width: 100%;
+	height: 35%;
+	font-size: 0.625rem;
+	line-height: 100%;
+	color: blueviolet;
+}
 
 footer .home span {
 	background: url(/static/base/img/home.png) no-repeat center;

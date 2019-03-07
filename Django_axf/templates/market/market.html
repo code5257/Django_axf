@@ -8,7 +8,72 @@
 {% block extcss %}
     <link rel="stylesheet" href="{% static 'market/css/market.css' %}">
 {% endblock %}
+{% block extjs %}
+    <script src="{% static 'market/js/market.js' %}"></script>
+{% endblock %}
+
+
+
+
+
+
+
 
 {% block content %}
-    闪购超市页面
+    <div class="market">
+        <div class="type-slider">
+            <ul>
+                {% for foodtype in foodtypes %}
+
+                    <li >
+                        <span></span>
+                        {% if forloop.counter == foodtype.typesort %}
+                            <a href= "#" >
+                                {{ foodtype.typename }}
+                            </a>
+
+                        {% endif %}
+
+                    </li>
+
+                {% endfor %}
+            </ul>
+        </div>
+
+        <nav>
+            <ul>
+                <li>
+                    <span>
+                        全部类型
+                        <i class="glyphicon glyphicon-chevron-up"></i>
+                    </span>
+                </li>
+                <li>
+                    <span>
+                        综合排序
+                        <i class="glyphicon glyphicon-chevron-up"></i>
+                    </span>
+                </li>
+            </ul>
+        </nav>
+
+        {#主体商品列表#}
+        <div class="main-content">
+            <div class="content-wrapper">
+                <ul>
+                    {% for foodtype in foodtypes %}
+                        {% if forloop.counter == 1 %}
+                        
+                        {% endif %}
+                        <li><a href="">
+                            <img class="goods-img" src="" alt="">
+                        </a></li>
+                    {% endfor %}
+
+                </ul>
+            </div>
+        </div>
+
+
+    </div>
 {% endblock %}

@@ -10,28 +10,68 @@ footer .home .name {
 }
 
 /* 头部轮播图部分*/
-#topSwiper {
-    height: 8rem;
-    width: 100%;
-    overflow: hidden;
-}
+/*#topSwiper {*/
+    /*height: 8rem;*/
+    /*width: 100%;*/
+    /*overflow: hidden;*/
+/*}*/
 
-#topSwiper .swiper-wrapper{
-    width: 100%;
-    height: 100%;
-}
-#topSwiper .swiper-wrapper a{
+/*#topSwiper .swiper-wrapper{*/
+    /*width: 100%;*/
+    /*height: 100%;*/
+/*}*/
+/*#topSwiper .swiper-wrapper a{*/
+    /*display: inline-block;*/
+    /*width: 100%;*/
+    /*height: 100%;*/
+/*}*/
+/*#topSwiper img{*/
+    /*width: 100%;*/
+    /*!*height: 100%;*!*/
+/*}*/
+/*#topSwiper .swiper-pagination{*/
+    /*bottom: 0px;*/
+/*}*/
+ .swiper-container {
+        width: 100%;
+        height: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .swiper-slide {
+        text-align: center;
+        font-size: 18px;
+        background: #fff;
+
+        /* Center slide text vertically */
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+    }
+
+.swiper-container .swiper-slide a{
     display: inline-block;
     width: 100%;
     height: 100%;
 }
 #topSwiper img{
     width: 100%;
-    height: 100%;
+    /*height: 100%;*/
 }
 #topSwiper .swiper-pagination{
     bottom: 0px;
 }
+
+
 
 
 /* 导航部分*/
@@ -217,3 +257,4 @@ footer .home .name {
 .main .main-wrapper .shoplist .shopitem button span{
 
 }
+
