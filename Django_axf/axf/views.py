@@ -1,7 +1,16 @@
-from django.shortcuts import render
+import hashlib
+import random
+import time
+import os
+
+from django.core.cache import cache
+from django.http import HttpResponse
+from django.shortcuts import render, redirect
 
 # Create your views here.
-from axf.models import Wheel, Nav, Mustbuy, Shop, Mainshow, Foodtype, Goods
+from Django_axf import settings
+from axf.VerifyCode import *
+from axf.models import Wheel, Nav, Mustbuy, Shop, Mainshow, Foodtype, Goods, User
 
 
 def home(request):
@@ -82,9 +91,121 @@ def market(request,childid='0',sortid='0'):
 
 def cart(request):
 
+
     return render(request,'cart/cart.html')
 
 
 def mine(request):
+    # 获取
+    token = request.session.get('token')
+    userid = cache.get(token)
+    user = None
+    if userid:
+        user = User.objects.get(pk=userid)
+    return render(request,'mine/mine.html',context={'user':user})
 
-    return render(request,'mine/mine.html')
+#密码加密
+def generate_password(res):
+    md5 = hashlib.md5()
+    md5.update(res.encode('utf-8'))
+    return md5.hexdigest()
+#token 唯一标识
+def generate_token():
+    temp = str(time.time()) + str(random.random())
+    md5 = hashlib.md5()
+    md5.update(temp.encode('utf-8'))
+    return md5.hexdigest()
+
+
+
+
+
+def register(request):
+
+    if request.method == 'GET':
+        # 登录时的验证码图片
+        # vc = VerifyCode()
+        # vc.generate()
+        # print(vc.code)
+
+        return render(request,'mine/register.html')
+    elif request.method =='POST':
+
+        email = request.POST.get('email')
+        passowrd = generate_password(request.POST.get('password'))
+        name = request.POST.get('name')
+        # print(email,passowrd,name)
+
+        #存入数据库
+        user = User()
+        user.email = email
+        user.password = passowrd
+        user.name = name
+        user.save()
+
+        #状态保持
+        token = generate_token()
+        #key-value >> token:userid
+        cache.set(token,user.id,60*60*24*3)
+        request.session['token'] = token
+
+        return redirect('axf:mine')
+
+
+
+def login(request):
+    if request.method == 'GET':
+
+        return render(request,'mine/login.html')
+    elif request.method =='POST':
+        email = request.POST.get('email')
+        password = generate_password(request.POST.get('password'))
+        print(email,password)
+
+        user = User.objects.filter(email=email).filter(password=password)
+        if user.exists():
+            #状态保持
+            user = user.first()
+            token = generate_token()
+            # key-value >> token:userid
+            cache.set(token, user.id, 60 * 60 * 24 * 3)
+            request.session['token'] = token
+
+            return redirect('axf:mine')
+        else:
+            return render(request,'mine/login.html',context={'err':'邮箱或密码有误！'})
+
+
+
+
+def logout(request):
+    request.session.flush()
+
+    return redirect('axf:mine')
+
+
+
+
+def upfile(request):
+    # 判断是否为POST
+    if request.method == 'POST':
+        # 获取文件内容
+        file = request.FILES['file']
+        # 文件保存路径
+        item = str(time.time()) + file.name
+        filepath = os.path.join(settings.MDEIA_ROOT, item )
+        with open(filepath, 'wb') as fp:
+            for info in file.chunks():
+                fp.write(info)
+        # 文件写入
+        token = request.session.get('token')
+        userid = cache.get(token)
+        user = User.objects.get(pk=userid)
+
+        user.img = item
+        user.save()
+
+        return redirect('axf:mine')
+    elif request.method == 'GET':
+
+        return render(request,'mine/upfile.html')

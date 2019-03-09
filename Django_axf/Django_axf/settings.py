@@ -86,6 +86,17 @@ DATABASES = {
     }
 }
 
+CACHES = {
+    'default':{
+        'BACKEND':'django_redis.cache.RedisCache',
+        #配置主机地址、端口号、数据库
+        'LOCATION':'REDIS://127.0.0.1:6379/1',
+        'OPTIONS':{
+            'CLIENT_CLASS':'django_redis.client.DefaultClient'
+        }
+    }
+}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -109,9 +120,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-Hans'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
@@ -128,3 +139,5 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR,'static')
 ]
+
+MDEIA_ROOT = os.path.join(BASE_DIR,'static/upfile')

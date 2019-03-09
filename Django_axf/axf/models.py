@@ -115,7 +115,7 @@ class User(models.Model):
     #昵称
     name = models.CharField(max_length=100)
     #头像
-    img = models.CharField(max_length=40,default='axf.png')
+    img = models.CharField(max_length=100,default='touxiang.jpg')
     #等级
     rank = models.IntegerField(default=1)
 

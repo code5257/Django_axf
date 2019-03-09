@@ -1,0 +1,32 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block extcss %}
+    <link rel="stylesheet" href="{% static 'mine/css/login.css' %}">
+{% endblock %}
+{% block extjs %}
+    <script src="{% static 'mine/js/login.js' %}"></script>
+{% endblock %}
+
+
+
+{% block content %}
+    <div class="login">
+        <div class="back">
+            <a href="{% url 'axf:mine' %}"><i class="glyphicon glyphicon-circle-arrow-left"></i></a>
+        </div>
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="input-group">
+                <span class="input-group-addon" id="sizing-addon2">邮箱</span>
+                <input type="text" class="form-control" placeholder="请输入邮箱" name="email">
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon" id="sizing-addon2">密码</span>
+                <input type="password" class="form-control" placeholder="请输入密码" name="password">
+            </div>
+            <div class="input-group" style="color: red">{{ err }}</div>
+            <input type="submit" id="subButton" value="登录">
+        </form>
+    </div>
+{% endblock %}

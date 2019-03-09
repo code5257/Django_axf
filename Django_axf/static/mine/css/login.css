@@ -1,0 +1,30 @@
+.login{
+    width: 100%;
+
+    height: 100%;
+    position: absolute;
+    background: whitesmoke;
+}
+.login form{
+    padding: 0 1rem;
+}
+.login form .input-group{
+    margin: 0.5rem 0;
+}
+.error{
+    margin-left:2rem;
+    font-size: 0.8rem;
+    color: #e62e2e;
+    display: none;
+}
+
+#subButton {
+    width: 100%;
+}
+
+.login .back{
+    text-align: left;
+}
+.login .back a{
+    font-size: 1.5rem;
+}

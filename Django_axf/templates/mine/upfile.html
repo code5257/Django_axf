@@ -1,0 +1,16 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}
+    上传头像
+{% endblock %}
+
+{% block content %}
+    <div class="upfile">
+        <form action="{% url 'axf:upfile' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" value="上传文件" name="file">
+            <input type="submit" value="上传">
+        </form>
+    </div>
+{% endblock %}
