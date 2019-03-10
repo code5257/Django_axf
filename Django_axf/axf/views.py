@@ -152,12 +152,20 @@ def register(request):
         return redirect('axf:mine')
 
 
+# global vc_code
 
 def login(request):
     if request.method == 'GET':
+        # vc = VerifyCode()
+        # vc.generate()
+        # vc_code = vc
 
         return render(request,'mine/login.html')
     elif request.method =='POST':
+
+        # login_code = request.POST.get('vc_code')
+        # print(login_code)
+        # if login_code==vc_code.code:
         email = request.POST.get('email')
         password = generate_password(request.POST.get('password'))
         print(email,password)
@@ -174,6 +182,8 @@ def login(request):
             return redirect('axf:mine')
         else:
             return render(request,'mine/login.html',context={'err':'邮箱或密码有误！'})
+        # else:
+        #     return render(request, 'mine/login.html',context={'err1':'验证码有误！'})
 
 
 

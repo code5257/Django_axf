@@ -21,19 +21,19 @@
 
         <form action="{% url 'axf:register' %}" method="post">
             {% csrf_token %}
-            <div class="input-group">
+            <div class="input-group input-group-lg">
                 <span class="input-group-addon" id="sizing-addon2">邮箱</span>
                 <input type="text" class="form-control" placeholder="请输入邮箱" name="email">
             </div>
-            <div class="input-group">
+            <div class="input-group input-group-lg">
                 <span class="input-group-addon" id="sizing-addon2">密码</span>
                 <input type="password" class="form-control" placeholder="6~12个字符" name="password">
             </div>
-            <div class="input-group">
+            <div class="input-group input-group-lg">
                 <span class="input-group-addon" id="sizing-addon2">昵称</span>
                 <input type="text" class="form-control" placeholder="6~12个字符" name="name">
             </div>
-            <div class="input-group">
+            <div class="input-group input-group-lg">
                 <span class="input-group-addon" id="sizing-addon2">验证码</span>
                 <input type="text" class="form-control" placeholder="请输入图片中验证码" name="verifycode">
                 <img src="{% static 'mine/img/vc.png' %}" alt="">

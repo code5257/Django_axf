@@ -64,7 +64,7 @@ class VerifyCode:
         画验证码字符串
         :return:
         """
-        myFont = ImageFont.truetype('../static/mine/font/STFANGSO.TTF',size=20,encoding='utf-8')
+        myFont = ImageFont.truetype('STFANGSO.TTF',size=20,encoding='utf-8')
         for i in range(self.size):
             x = 15 + i * (self.width - 20)/self.size  # 字符等间距
             y =  randint(5,10)  # 随机高度
@@ -100,4 +100,4 @@ class StrCode(VerifyCode):
 #     vc = VerifyCode()
 #     # vc = StrCode()
 #     vc.generate()
-#     print(vc.code)
+    # print(vc.code)

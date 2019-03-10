@@ -6,6 +6,9 @@
 {% endblock %}
 
 {% block content %}
+    <div class="back">
+            <a href="{% url 'axf:mine' %}"><i class="glyphicon glyphicon-circle-arrow-left"></i></a>
+    </div>
     <div class="upfile">
         <form action="{% url 'axf:upfile' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
