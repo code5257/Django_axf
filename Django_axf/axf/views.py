@@ -4,7 +4,7 @@ import time
 import os
 
 from django.core.cache import cache
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 
 # Create your views here.
@@ -166,9 +166,14 @@ def login(request):
         # login_code = request.POST.get('vc_code')
         # print(login_code)
         # if login_code==vc_code.code:
+
         email = request.POST.get('email')
         password = generate_password(request.POST.get('password'))
         print(email,password)
+
+        #js中存入cookie中的参数来进行重定向
+        back = request.COOKIES.get('back')
+        print(back)
 
         user = User.objects.filter(email=email).filter(password=password)
         if user.exists():
@@ -178,8 +183,10 @@ def login(request):
             # key-value >> token:userid
             cache.set(token, user.id, 60 * 60 * 24 * 3)
             request.session['token'] = token
-
-            return redirect('axf:mine')
+            if back == 'mine':
+                return redirect('axf:mine')
+            else:
+                return redirect('axf:marketbase')
         else:
             return render(request,'mine/login.html',context={'err':'邮箱或密码有误！'})
         # else:
@@ -190,8 +197,10 @@ def login(request):
 
 def logout(request):
     request.session.flush()
+    response = redirect('axf:mine')
+    response.delete_cookie('base')
 
-    return redirect('axf:mine')
+    return response
 
 
 
@@ -219,3 +228,44 @@ def upfile(request):
     elif request.method == 'GET':
 
         return render(request,'mine/upfile.html')
+
+
+def checkemail(request):
+    res = request.GET.get('email')
+    users = User.objects.filter(email=res)
+
+    if users.exists():
+        response_data = {
+            'result':0,
+            'msg':'用户名重复',
+        }
+        return JsonResponse(response_data)
+    else:
+        response_data = {
+            'result': 1,
+            'msg': '用户名可用',
+        }
+        return JsonResponse(response_data)
+
+
+def addcart(request):
+    token = request.session.get('token','')
+
+    userid = cache.get(token)
+    print(userid)
+    if userid:  #true是已经登录状态
+
+        res = request.GET.get('goodsid')
+        # print('收到ajax数据产品id',res)
+
+        response_data = {
+            'status':1,
+            'mig':'添加成功'
+        }
+        return JsonResponse(response_data)
+
+    response_data = {
+        'status':0,
+        'msg':'请先进行登录'
+    }
+    return JsonResponse(response_data)

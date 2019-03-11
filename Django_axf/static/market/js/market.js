@@ -65,4 +65,33 @@ $(function () {
 
     }
 
+
+
+
+///////////////////////////////////////////////////
+//商品没有添加购物车时 减号和数量都不显示
+    $('.glyphicon-minus').hide()
+    $('.bt-wrapper>i').hide()
+
+    $('.bt-wrapper>.glyphicon-plus').click(function () {
+        // console.log(1)
+        //哪件产品，通过属性来确认
+        request_data = {
+            'goodsid':$(this).attr('data-goodsid')
+        }
+        $.get('/addcart/',request_data,function (response) {
+            if(!response.status){
+                console.log('请登录')
+                //用cookie传参数 用于登陆后回到market界面，ajax中不能重定向
+                $.cookie('back','market',{expires: 3,path: '/'})
+                window.open('/login/','_self')
+            }else{
+                console.log('已经登录')
+            }
+
+        })
+
+    })
+
+
 })

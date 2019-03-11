@@ -18,12 +18,12 @@
         <div class="user-wrapper">
             <div class="user-img">
                 <a href="{% url 'axf:upfile' %}">
-                    <img src="/static/upfile/{{ user.img | default:'touxiang.jpg'}}" alt="">
+                    <img src="/static/upfile/{{ user.img | default:'touxiang.jpg' }}" alt="">
                 </a>
             </div>
             <div class="user-content">
-                <p><a href="{% url 'axf:login' %}"><i
-                        class="glyphicon glyphicon-user"></i> {{ user.name | default:'未登录' }}</a></p>
+                <p><a id="login_ck"><i
+                        class="glyphicon glyphicon-user" ></i> {{ user.name | default:'未登录' }}</a></p>
                 <p><i class="glyphicon glyphicon-stats"></i> 等级{{ user.rank | default:'无' }}</p>
 
                 <a href="{% url 'axf:register' %}"><span class="register">注册</span></a>

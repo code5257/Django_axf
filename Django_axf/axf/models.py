@@ -121,3 +121,27 @@ class User(models.Model):
 
     class Meta:
         db_table ='axf_user'
+
+
+#添加购物车模型类
+#购物车是用户 对 商品 多对多模型 直接建立关系表
+class Cart(models.Model):
+    #用户 （添加商品到哪个用户）
+    user = models.ForeignKey(User)
+
+    #商品 （用户对应有哪些商品）
+    goods = models.ForeignKey(Goods)
+
+    #商品数量
+    goodsnumber = models.IntegerField()
+
+    # 是否选中
+    isselect = models.BooleanField(default=True)
+    # 是否删除
+    isdelete = models.BooleanField(default=False)
+
+
+    class Meta:
+        db_table = 'axf_cart'
+
+

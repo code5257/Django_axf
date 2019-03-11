@@ -15,7 +15,9 @@ urlpatterns = [
     url(r'^register/$',views.register,name='register'),
     url(r'^login/$',views.login,name='login'),
     url(r'^logout/$',views.logout,name='logout'),
+    url(r'^checkemail/$',views.checkemail,name='checkemail'),#ajax请求 数据交互
+    url(r'^upfile/$',views.upfile,name='upfile'),#换头像
 
-    url(r'^upfile/$',views.upfile,name='upfile'),
+    url(r'^addcart/$',views.addcart,name='addcart'),
 
 ]

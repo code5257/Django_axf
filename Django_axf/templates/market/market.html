@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="{% static 'market/css/market.css' %}">
 {% endblock %}
 {% block extjs %}
-    <script src="https://cdn.bootcss.com/jquery-cookie/1.3.1/jquery.cookie.js"></script>
     <script src="{% static 'market/js/market.js' %}"></script>
 {% endblock %}
 
@@ -84,10 +83,11 @@
                                     </p>
                                 </div>
                             </a>
+
                             <div class="bt-wrapper">
-                                <span class="glyphicon glyphicon-plus"></span>
-                                <i class="num">88</i>
                                 <span class="glyphicon glyphicon-minus"></span>
+                                <i class="num">0</i>
+                                <span class="glyphicon glyphicon-plus" data-goodsid="{{ goods.productid }}" ></span>
                             </div>
                         </li>
 
