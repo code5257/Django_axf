@@ -10,7 +10,7 @@ from django.shortcuts import render, redirect
 # Create your views here.
 from Django_axf import settings
 from axf.VerifyCode import *
-from axf.models import Wheel, Nav, Mustbuy, Shop, Mainshow, Foodtype, Goods, User
+from axf.models import Wheel, Nav, Mustbuy, Shop, Mainshow, Foodtype, Goods, User, Cart
 
 
 def home(request):
@@ -86,13 +86,40 @@ def market(request,childid='0',sortid='0'):
         'childid':childid,
     }
 
+    #获取购物车信息
+    token = request.session.get('token')
+    userid = cache.get(token)
+    if userid:
+        user = User.objects.get(pk=userid)
+        carts = user.cart_set.all()
+        res['carts'] = carts
+
+
     return render(request,'market/market.html',context=res)
 
 
 def cart(request):
+    token = request.session.get('token')
+    userid = cache.get(token)
+    if userid:
+        user = User.objects.get(pk=userid)
+        carts = user.cart_set.filter(goodsnumber__gt=0)
+
+        #默认情况下，购物车里面的东西都是全部选中状态，只要有一个不选中，全选就取消
+        isall = True
+        for cart in carts:
+            if not cart.isselect:
+                isall = False
+        res = {'carts':carts,
+               'isall':isall,
+               }
+        return render(request, 'cart/cart.html',context=res)
+    else:
+        return render(request,'cart/no-login.html')
 
 
-    return render(request,'cart/cart.html')
+
+
 
 
 def mine(request):
@@ -252,20 +279,100 @@ def addcart(request):
     token = request.session.get('token','')
 
     userid = cache.get(token)
-    print(userid)
+    # print(userid) #获取登录用户信息userid
+
     if userid:  #true是已经登录状态
+        user = User.objects.get(pk=userid)
+        goodsid = request.GET.get('goodsid')
+        # print('收到ajax数据产品id',goodsid)
+        goods = Goods.objects.get(pk=goodsid)
 
-        res = request.GET.get('goodsid')
-        # print('收到ajax数据产品id',res)
+        carts = Cart.objects.filter(user=user).filter(goods=goods)
+        if carts.exists():
+            cart = carts.first()
+            cart.goodsnumber += 1
+            cart.save()
 
+        else:
+            cart = Cart()
+            cart.user = user
+            cart.goods = goods
+            cart.goodsnumber = 1
+            cart.save()
         response_data = {
-            'status':1,
-            'mig':'添加成功'
+            'status': 1,
+            'mig': '添加{}成功添加总数量{}'.format(cart.goods.productlongname, cart.goodsnumber),
+            'goodsnumber':cart.goodsnumber
         }
         return JsonResponse(response_data)
 
     response_data = {
         'status':0,
         'msg':'请先进行登录'
+    }
+    return JsonResponse(response_data)
+
+
+def subcart(request):
+    #找到对应商品
+    goodsid = request.GET.get('goodsid')
+    # print(goodsid)
+    goods = Goods.objects.get(pk=goodsid)
+
+    #找到对应的用户
+    token = request.session.get('token')
+    userid = cache.get(token)
+    user = User.objects.get(pk=userid)
+
+    #获取对应的购物车信息
+    cart = Cart.objects.filter(user=user).filter(goods=goods).first()
+    cart.goodsnumber -= 1
+    cart.save()
+
+    respons_data = {
+        'status':1,
+        'msg':'商品从购物车移除',
+        'goodsnumber':cart.goodsnumber
+    }
+    return JsonResponse(respons_data)
+
+#改变购物车中要进行结算的选中状态
+def changecartselect(request):
+    cartid = request.GET.get('cartid')
+    # print(cartid)
+    cart = Cart.objects.get(pk=cartid)
+    cart.isselect = not cart.isselect
+    cart.save()
+
+    response_data = {
+        'status':1,
+        'mssg':'选中状态修改完成',
+        'isselect':cart.isselect
+    }
+
+    return JsonResponse(response_data)
+
+
+def changecartall(request):
+    isall = request.GET.get('isall')
+    # print(isall)
+
+    #获取用户
+    token = request.session.get('token')
+    userid = cache.get(token)
+    user = User.objects.get(pk=userid)
+    carts = user.cart_set.all()
+    if isall == 'true':
+        isall = True
+    else:
+        isall = False
+    for cart in carts:
+        cart.isselect = isall
+        cart.save()
+
+    response_data = {
+        'status':1,
+        'isall':isall,
+        'msg':'全选状态已经改变',
     }
     return JsonResponse(response_data)

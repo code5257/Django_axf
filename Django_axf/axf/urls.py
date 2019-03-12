@@ -19,5 +19,9 @@ urlpatterns = [
     url(r'^upfile/$',views.upfile,name='upfile'),#换头像
 
     url(r'^addcart/$',views.addcart,name='addcart'),
+    url(r'^subcart/$',views.subcart,name='subcart'),
+    #ajax 请求
+    url(r'^changecartselect/$',views.changecartselect,name='changecartselect'),
+    url(r'^changecartall/$',views.changecartall,name='changecartall'),
 
 ]

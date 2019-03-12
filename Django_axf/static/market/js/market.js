@@ -70,28 +70,75 @@ $(function () {
 
 ///////////////////////////////////////////////////
 //商品没有添加购物车时 减号和数量都不显示
-    $('.glyphicon-minus').hide()
-    $('.bt-wrapper>i').hide()
+//     $('.glyphicon-minus').hide()
+//     $('.bt-wrapper>i').hide()
+    //当数量大于零的时候就不隐藏，所以进行判断
+    $('.bt-wrapper .num').each(function () {
+        var num = parseInt($(this).html())
+        if (num){
+            $(this).show()
+            $(this).prev().show()
+        }else{
+            $(this).hide()
+            $(this).prev().hide()
+        }
+    })
+
+
 
     $('.bt-wrapper>.glyphicon-plus').click(function () {
+        var $that = $(this)
         // console.log(1)
         //哪件产品，通过属性来确认
         request_data = {
             'goodsid':$(this).attr('data-goodsid')
         }
         $.get('/addcart/',request_data,function (response) {
-            if(!response.status){
+            if(response.status == 0){
                 console.log('请登录')
                 //用cookie传参数 用于登陆后回到market界面，ajax中不能重定向
                 $.cookie('back','market',{expires: 3,path: '/'})
                 window.open('/login/','_self')
-            }else{
-                console.log('已经登录')
+            }else if(response.status == 1){
+                // console.log('已经登录')
+                console.log(response)
+                // 有问题，改变的是所有
+                // $('.bt-wrapper .num').html(response.number)
+
+                // 用兄弟节点 [操作按钮 this]
+                // this 谁调用 指向 谁
+                // 当前函数是ajax触发的 ，所以 $(this) 指向 ajax
+                // $(this).prev().html(response.number)
+                $that.prev().html(response.goodsnumber)
+
+                //加号 的前一个和前两个兄弟 数量 和 减号都显示出来
+
+                $that.prev().show()
+                $that.prev().prev().show()
             }
 
         })
 
     })
 
+    $('.bt-wrapper .glyphicon-minus').click(function () {
+        var $that = $(this)
+        request_data = {
+            'goodsid': $(this).attr('data-goodsid')
+        }
+
+        $.get('/subcart/',request_data,function (response) {
+            console.log(response)
+            if(response.status == 1){
+                if(response.goodsnumber){
+                    $that.next().html(response.goodsnumber)
+                }else{
+                    $that.hide()
+                    $that.next().hide()
+                }
+            }
+        })
+
+    })
 
 })
