@@ -10,7 +10,7 @@ from django.shortcuts import render, redirect
 # Create your views here.
 from Django_axf import settings
 from axf.VerifyCode import *
-from axf.models import Wheel, Nav, Mustbuy, Shop, Mainshow, Foodtype, Goods, User, Cart
+from axf.models import Wheel, Nav, Mustbuy, Shop, Mainshow, Foodtype, Goods, User, Cart, Order, OrderGoods
 
 
 def home(request):
@@ -127,9 +127,18 @@ def mine(request):
     token = request.session.get('token')
     userid = cache.get(token)
     user = None
+    response_data = {}
     if userid:
         user = User.objects.get(pk=userid)
-    return render(request,'mine/mine.html',context={'user':user})
+        response_data['user'] = user
+
+        orders = user.order_set.all()
+        #待支付
+        response_data['waitpay'] = orders.filter(status = 0).count()
+        #待收货
+        response_data['paydone'] = orders.filter(status= 1).count()
+
+    return render(request,'mine/mine.html',context=response_data)
 
 #密码加密
 def generate_password(res):
@@ -327,6 +336,7 @@ def subcart(request):
     #获取对应的购物车信息
     cart = Cart.objects.filter(user=user).filter(goods=goods).first()
     cart.goodsnumber -= 1
+
     cart.save()
 
     respons_data = {
@@ -376,3 +386,57 @@ def changecartall(request):
         'msg':'全选状态已经改变',
     }
     return JsonResponse(response_data)
+
+#生成订单方法
+def generate_identifier():
+    temp = str(int(time.time())) + str(random.randrange(1000,10000))
+    return temp
+
+#生成订单
+def generateorder(request):
+    #确定用户身份
+    token = request.session.get('token')
+    userid = cache.get(token)
+    # print(userid)
+    user = User.objects.get(pk=userid)
+    # print(user)
+    #生成订单
+    order = Order()
+    order.user = user #表明订单用户 属于谁
+    order.identifier = generate_identifier() #生成订单号
+    order.save()
+
+    #订单中的商品 从购物车中循环拿出
+    carts = user.cart_set.filter(isselect = True)
+
+    for cart in carts:
+        orderGoods = OrderGoods()
+        orderGoods.order = order
+        orderGoods.goods = cart.goods
+        orderGoods.number = cart.goodsnumber
+        orderGoods.save()
+        #加入订单的商品从购物车中移除
+        cart.delete()
+
+    return render(request,'order/orderdetail.html',context={'order':order})
+
+
+
+def orderlist(request):
+    token = request.session.get('token')
+    userid = cache.get(token)
+
+    user = User.objects.get(pk=userid)
+
+    #获取对应用户的订单 主获从
+    orders= user.order_set.all()
+    return render(request,'order/orderlist.html',context={'orders':orders})
+
+
+
+
+
+def orderdetail(request,identifier):
+    order = Order.objects.filter(identifier=identifier).first()
+
+    return render(request,'order/orderdetail.html',context={'order':order})

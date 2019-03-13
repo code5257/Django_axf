@@ -24,4 +24,10 @@ urlpatterns = [
     url(r'^changecartselect/$',views.changecartselect,name='changecartselect'),
     url(r'^changecartall/$',views.changecartall,name='changecartall'),
 
+    #订单生成与查询路由
+    url(r'^generateorder/$', views.generateorder, name='generateorder'),    # 生成订单
+    url(r'orderlist/$', views.orderlist, name='orderlist'), # 订单列表
+    url(r'^orderdetail/(?P<identifier>\d+)/$', views.orderdetail, name='orderdetail'),  # 订单详情
+
+
 ]

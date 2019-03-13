@@ -1,0 +1,20 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+    订单详情
+{% endblock %}
+
+{% block content %}
+    <div class="orderdetail">
+        <p>{{ order.identifier }}</p>
+    </div>
+    <ul>
+    {% for ordergoods in order.ordergoods_set.all %}
+        <li>
+        <span>{{ ordergoods.goods.productlongname }}</span>
+        <i>×{{ ordergoods.number }}</i>
+        </li>
+    {% endfor %}
+
+    </ul>
+{% endblock %}

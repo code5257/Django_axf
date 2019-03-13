@@ -37,7 +37,7 @@
         <div class="other">
             <section class="my">
                 <span>我的订单</span>
-                <a href="#">查看全部订单 <i class="glyphicon glyphicon-chevron-right"></i></a>
+                <a href="{% url 'axf:orderlist' %}">查看全部订单 <i class="glyphicon glyphicon-chevron-right"></i></a>
             </section>
 
             <section>
@@ -45,7 +45,11 @@
                     <li>
                         <a href="#">
                             <dl>
-                                <dt><i class="glyphicon glyphicon-usd"></i></dt>
+                                <dt class="glyphicon glyphicon-usd">
+                                    <span class="badge">{% if waitpay %}
+                                        {{ waitpay }}
+                                    {% endif %}</span>
+                                </dt>
                                 <dd>待付款</dd>
                             </dl>
                         </a>
@@ -53,7 +57,11 @@
                     <li>
                         <a href="#">
                             <dl>
-                                <dt><i class="glyphicon glyphicon-envelope"></i></dt>
+                                <dt class="glyphicon glyphicon-envelope">
+                                    <span class="badge">{% if paydone %}
+                                        {{ paydone }}
+                                    {% endif %}</span>
+                                </dt>
                                 <dd>待收货</dd>
                             </dl>
                         </a>
